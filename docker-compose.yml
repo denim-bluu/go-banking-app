@@ -1,17 +1,17 @@
 version: "3.8"
 services:
   postgres:
+    container_name: ${POSTGRES_CONTAINER_NAME}
     image: postgres:${POSTGRES_VERSION}
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
-      - "5433:${POSTGRES_PORT}"
-    volumes:
-      - pgdata:/var/lib/postgresql/data
+      - "${POSTGRES_PORT}:5432"
 
   pgadmin:
+    container_name: ${PGADMIN_CONTAINER_NAME}
     image: dpage/${PGADMIN_VERSION}
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
