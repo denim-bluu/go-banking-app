@@ -1,28 +1,30 @@
 package db
 
 import (
-	"context"
+	"database/sql"
 	"log"
 	"os"
 	"testing"
 
-	"github.com/jackc/pgx/v5"
 	"github.com/joho/godotenv"
+	_ "github.com/lib/pq"
 )
 
 var testQueries *Queries
+var testDB *sql.DB
 
 func TestMain(m *testing.M) {
-	err := godotenv.Load("../../.env")
+	var err error
+	err = godotenv.Load("../../.env")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	conn, err := pgx.Connect(context.Background(), os.Getenv("DATABASE_URL"))
-	defer conn.Close(context.Background())
+	testDB, err := sql.Open("postgres", os.Getenv("DATABASE_URL"))
+	defer testDB.Close()
 	if err != nil {
 		log.Fatal("Cannot connect to db:", err)
 	}
-	testQueries = New(conn)
+	testQueries = New(testDB)
 	os.Exit(m.Run())
 }

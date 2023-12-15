@@ -2,10 +2,10 @@ package db
 
 import (
 	"context"
+	"database/sql"
 	"testing"
 
 	"github.com/denim-bluu/simplebank/util"
-	"github.com/jackc/pgx/v5"
 	"github.com/stretchr/testify/require"
 )
 
@@ -57,9 +57,9 @@ func TestDeleteAccount(t *testing.T) {
 	require.NoError(t, err)
 
 	acc2, err := testQueries.GetAccount(context.Background(), acc1.ID)
-
 	require.Error(t, err)
-	require.EqualError(t, err, pgx.ErrNoRows.Error())
+
+	require.EqualError(t, err, sql.ErrNoRows.Error())
 	require.Empty(t, acc2)
 }
 
